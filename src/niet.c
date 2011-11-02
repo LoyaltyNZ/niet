@@ -181,7 +181,7 @@ int help() {
 		"            dies, waiting for up to %ds if it's dying in less than %ds. Sends output from the program\n"
 		"            on its stdout and stderr to syslog using `logger`.  If sent a TERM signal, sends a TERM\n"
 		"            signal to the program, waits for it to finish, and then restarts it.  If sent a QUIT\n"
-		"            signal, sends a TERM signal to the program, waits for it to finish, and then quits.\n"
+		"            signal, sends a QUIT signal to the program, waits for it to finish, and then quits.\n"
 		"\n"
 		"            niet requires no privileges and should be run as the user you want to run the daemon under.\n"
 		"            It can be run as root, but running your daemons as root is generally discouraged.\n"
@@ -370,9 +370,9 @@ int main(int argc, char* argv[]){
 						break;
 
 					case SIGQUIT:
-						// we were sent a QUIT, send a TERM to the child process and then quit
+						// we were sent a QUIT, send a QUIT to the child process and then quit
 						fprintf(stdout, "Asking %s to terminate so we can shut down\n", program_arguments[0]);
-						kill(child, SIGTERM); // ignore errors from sending to zombies
+						kill(child, SIGQUIT); // ignore errors from sending to zombies
 						if (terminate_timeout > 0) reset_alarm(terminate_timeout);
 						terminated = 1;
 						respawn = 0;
