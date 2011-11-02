@@ -1,3 +1,9 @@
+The only change I've made is to send a QUIT instead of a TERM when receiving a QUIT so as to interact 
+with Resque (https://github.com/defunkt/resque) better. Resque expects a QUIT to graceful shutdown 
+workers which are actively processing a task rather than a TERM.
+====================================================================================================
+
+
 Niet, A process respawner for people who want syslogging and very little else
 =============================================================================
 
