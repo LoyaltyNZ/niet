@@ -371,7 +371,7 @@ int main(int argc, char* argv[]){
 
 					case SIGQUIT:
 						// we were sent a QUIT, send a QUIT to the child process and then quit
-						fprintf(stdout, "Asking %s to terminate so we can shut down\n", program_arguments[0]);
+						fprintf(stdout, "Asking %s to quit so we can shut down\n", program_arguments[0]);
 						kill(child, SIGQUIT); // ignore errors from sending to zombies
 						if (terminate_timeout > 0) reset_alarm(terminate_timeout);
 						terminated = 1;
