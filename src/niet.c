@@ -370,6 +370,15 @@ int main(int argc, char* argv[]){
 						// keep respawning
 						break;
 
+					case SIGHUP:
+						// we were sent a TERM, send a QUIT to the child process and then respawn it
+						if (signo != SIGPIPE) fprintf(stdout, "Asking %s to quit so we can restart it\n", program_arguments[0]); // mustn't cause another SIGPIPE in our handling of SIGPIPE!
+						kill(child, SIGQUIT); // ignore errors from sending to zombies	
+						if (terminate_timeout > 0) reset_alarm(terminate_timeout);
+						terminated = 1;
+						// keep respawning
+						break;
+
 					case SIGQUIT:
 						// we were sent a QUIT, send a QUIT to the child process and then quit
 						fprintf(stdout, "Asking %s to quit so we can shut down\n", program_arguments[0]);
@@ -387,7 +396,6 @@ int main(int argc, char* argv[]){
 					
 					case SIGUSR1:
 					case SIGUSR2:
-					case SIGHUP:
 						fprintf(stdout, "Passing the '%s' signal on to %s\n", strsignal(signo), program_arguments[0]);
 						kill(child, signo); // ignore errors from sending to zombies
 						break;
